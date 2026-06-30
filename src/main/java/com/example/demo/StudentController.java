@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StudentController {
 
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public StudentController(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @GetMapping("/students")
     public List<StudentData> getStudents() {
-        return studentRepository.findAll();
+        return studentService.getAllStudents();
     }
 
     @PostMapping("/students")
-    public StudentData createStudent(@RequestBody StudentData student) {
-        return studentRepository.save(student);
+    public StudentData createStudent(
+            @RequestBody StudentData student) {
+
+        return studentService.saveStudent(student);
     }
 }
