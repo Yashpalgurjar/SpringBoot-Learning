@@ -2,6 +2,7 @@ package com.example.demo;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +21,15 @@ public class StudentController {
     public List<StudentData> getStudents() {
         return studentService.getAllStudents();
     }
-
     @PostMapping("/students")
-    public StudentData createStudent(
+    public ResponseEntity<StudentData> createStudent(
             @RequestBody StudentData student) {
 
-        return studentService.saveStudent(student);
+        StudentData savedStudent =
+                studentService.saveStudent(student);
+
+        return ResponseEntity
+                .status(201)
+                .body(savedStudent);
     }
-}
+    }
