@@ -1,10 +1,12 @@
 package com.example.demo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
+import com.example.demo.dto.StudentRequestDTO;
+import com.example.demo.dto.StudentResponseDTO;
 @Service
 public class StudentService {
 
@@ -14,20 +16,30 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<StudentData> getAllStudents() {
-        return studentRepository.findAll();
-    }
+    public List<StudentResponseDTO> getAllStudents() {
 
-    public StudentData saveStudent(StudentData student) {
+        List<StudentData> students = studentRepository.findAll();
 
-        if(student.getAge() < 18) {
-            throw new RuntimeException("Age must be 18+");
+        List<StudentResponseDTO> response = new ArrayList<>();
+
+        for (StudentData student : students) {
+
+            StudentResponseDTO dto = new StudentResponseDTO();
+
+            dto.setId(student.getId());
+            dto.setName(student.getName());
+            dto.setAge(student.getAge());
+            dto.setCity(student.getCity());
+            dto.setEmail(student.getEmail());
+            dto.setPhone(student.getPhone());
+
+            response.add(dto);
         }
 
-        return studentRepository.save(student);
-        
-        
-    }
+        return response;
+    }    	    
+    	
+    	
     public StudentData getStudentById(Long id) {
     	
     	studentRepository.findById(id);

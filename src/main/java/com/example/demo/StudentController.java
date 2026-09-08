@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.StudentRequestDTO;
+import com.example.demo.dto.StudentResponseDTO;
+
+import jakarta.validation.Valid;
+
 @RestController
 public class StudentController {
 
@@ -21,10 +26,11 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public List<StudentData> getStudents() {
+    public List<StudentResponseDTO> getStudents() {
         return studentService.getAllStudents();
-        
     }
+    
+    
     @GetMapping("/students/{id}")
     public StudentData getStudentById(
             @PathVariable("id") Long id) {
@@ -32,20 +38,21 @@ public class StudentController {
         return studentService.getStudentById(id);
     }
     @PostMapping("/students")
-    public ResponseEntity<StudentData> createStudent(
-            @RequestBody StudentData student) {
+    public ResponseEntity<StudentResponseDTO> createStudent(
+            @Valid @RequestBody StudentRequestDTO studentRequestDTO) {
 
-        StudentData savedStudent =
-                studentService.saveStudent(student);
+        StudentResponseDTO response =
+                studentService.saveStudent(studentRequestDTO);
 
         return ResponseEntity
                 .status(201)
-                .body(savedStudent);
+                .body(response);
     }
+        
     @PutMapping("/students/{id}")
     public StudentData updateStudent(
             @PathVariable("id") Long id,
-            @RequestBody StudentData student) {
+            @Valid @RequestBody StudentData student) {
 
         return studentService.updateStudent(
                 id, student);
