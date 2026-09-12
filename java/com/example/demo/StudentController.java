@@ -1,0 +1,79 @@
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.StudentRequestDTO;
+import com.example.demo.dto.StudentResponseDTO;
+
+import jakarta.validation.Valid;
+
+@RestController
+public class StudentController {
+
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    @GetMapping("/students")
+    public Page<StudentResponseDTO> getStudents(Pageable pageable) {
+        return studentService.getAllStudents(pageable);
+    }    
+    
+    
+    @GetMapping("/students/{id}")
+    public StudentResponseDTO getStudentById(
+            @PathVariable("id") Long id) {
+
+        return  studentService.getStudentById(id);
+    }
+    @GetMapping("/students/city/{city}")
+    public List<StudentData> getStudentsByCity(
+            @PathVariable("city") String city) {
+
+        return studentService.getStudentsByCity(city);
+    }
+    @GetMapping("/students/age/greater/{age}")
+    public List<StudentData> getStudentsByAgeGreaterThan(
+            @PathVariable("age") int age) {
+
+        return studentService.getStudentsByAgeGreaterThan(age);
+    }
+    @PostMapping("/students")
+    public ResponseEntity<StudentResponseDTO> createStudent(
+            @Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+
+        StudentResponseDTO response =
+                studentService.saveStudent(studentRequestDTO);
+
+        return ResponseEntity
+                .status(201)
+                .body(response);
+    }
+        
+    @PutMapping("/students/{id}")
+    public StudentResponseDTO updateStudent(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody StudentRequestDTO student) {
+
+        return studentService.updateStudent(id, student);
+    }    
+    @DeleteMapping("/students/{id}")
+    public String deleteStudent(
+            @PathVariable("id") Long id) {
+
+        return studentService.deleteStudent(id);
+    }
+    }
