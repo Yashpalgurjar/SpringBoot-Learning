@@ -14,6 +14,59 @@
 
     @Service
     public class StudentService {
+    	
+    	public List<StudentData> getStudentsByAgeJPQL(int age) {
+    	    return studentRepository.findStudentsByAgeJPQL(age);
+    	    
+    	}
+    	public List<StudentData> getStudentsNotInCitiesJPQL(
+    	        List<String> cities) {
+
+    	    return studentRepository.findStudentsNotInCitiesJPQL(cities);
+    	}
+    	public List<StudentData> getStudentsNameNotLikeJPQL(
+    	        String name) {
+
+    	    return studentRepository.findStudentsNameNotLikeJPQL(name);
+    	}
+    	public List<StudentData> getStudentsByAgeGreaterOrEqualJPQL(
+    	        int age) {
+
+    	    return studentRepository.findStudentsByAgeGreaterOrEqualJPQL(age);
+    	}
+    	public List<StudentData> getStudentsWithNonNullCityJPQL() {
+    	    return studentRepository.findStudentsWithNonNullCityJPQL();
+    	}
+    	public List<StudentData> getStudentsByAgeRangeJPQL(
+    	        int minAge, int maxAge) {
+
+    	    return studentRepository.findStudentsByAgeRangeJPQL(
+    	            minAge, maxAge);
+    	}public List<StudentData> getStudentsByCitiesJPQL(
+    	        List<String> cities) {
+
+    	    return studentRepository.findStudentsByCitiesJPQL(cities);
+    	}
+    	public List<StudentData> searchStudentsByNameJPQL(String name) {
+
+    	    return studentRepository.searchStudentsByNameJPQL(name);
+    	}
+    	public List<StudentData> getStudentsSortedByAgeDescJPQL() {
+    	    return studentRepository.findStudentsSortedByAgeDescJPQL();
+    	}
+    	public List<StudentData> getStudentsSortedByAgeJPQL() {
+    	    return studentRepository.findStudentsSortedByAgeJPQL();
+    	}
+    	public List<StudentData> getStudentsByCityOrAgeJPQL(
+    	        String city, int age) {
+
+    	    return studentRepository.findByCityOrAgeJPQL(city, age);
+    	}
+    	public List<StudentData> getStudentsByCityAndAgeJPQL(
+    	        String city, int age) {
+
+    	    return studentRepository.findByCityAndAgeJPQL(city, age);
+    	}
 
         private final StudentRepository studentRepository;
 
