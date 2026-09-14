@@ -46,7 +46,7 @@
     	        List<String> cities) {
 
     	    return studentRepository.findStudentsByCitiesJPQL(cities);
-    	}
+    	}                     
     	public List<StudentData> searchStudentsByNameJPQL(String name) {
 
     	    return studentRepository.searchStudentsByNameJPQL(name);
@@ -67,13 +67,21 @@
 
     	    return studentRepository.findByCityAndAgeJPQL(city, age);
     	}
+    	public long countAllStudentJPQL () {
+    		return studentRepository.countAllStudentsJPQL();
+    	}
+    
 
         private final StudentRepository studentRepository;
-
-        public StudentService(StudentRepository studentRepository) {
-            this.studentRepository = studentRepository;
+    
+        public StudentService(StudentRepository studentsRepository) {
+            this.studentRepository = studentsRepository;
            
             }
+        
+        public long countAllStudentsJPQL() {
+            return studentRepository.countAllStudentsJPQL();
+        }
         @Transactional
         public StudentData saveStudent(StudentData student) {
             return studentRepository.save(student);
