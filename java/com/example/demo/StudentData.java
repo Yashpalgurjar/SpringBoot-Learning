@@ -25,6 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentData {
+	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +48,5 @@ public class StudentData {
 
     @OneToMany(mappedBy = "student")
     private List<Course> courses;
+  
 }

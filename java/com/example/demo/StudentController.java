@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.data.domain.Sort;
 import com.example.demo.dto.StudentRequestDTO;
 import com.example.demo.dto.StudentResponseDTO;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
 
 import jakarta.validation.Valid;
 
@@ -143,6 +146,39 @@ public class StudentController {
     	return studentService.countAllStudentsJPQL();
     	
     }
+    @GetMapping("/students/jpql")
+    public List<StudentData> findAllStudentsJPQL() {
+        return studentService.findAllStudentsJPQL();
+    }
+    @GetMapping("/students/age")
+    public List<StudentData> findStudentsByAge(
+            @RequestParam("age") int age) {
+
+        return studentService.findStudentsByAge(age);
+    }
+    @GetMapping("/students/age/greater")
+    public List<StudentData> findStudentsByAgeGreaterThan(
+            @RequestParam("age") int age) {
+
+        return studentService.findStudentsByAgeGreaterThan(age);
+    }@GetMapping("/students/age/greater-equal")
+    public List<StudentData> findStudentsByAgeGreaterOrEqualJPQL(
+            @RequestParam("age") int age) {
+
+        return studentService.findStudentsByAgeGreaterOrEqualJPQL(age);
+    }@GetMapping("/students/city-age")
+    public List<StudentData> findByCityAndAgeJPQL(
+            @RequestParam("city") String city,
+            @RequestParam("age") int age) {
+
+        return studentService.findByCityAndAgeJPQL(city, age);
+    }@GetMapping("/students/city-or-age")
+    public List<StudentData> findByCityOrAgeJPQL(
+            @RequestParam("city") String city,
+            @RequestParam("age") int age) {
+
+        return studentService.findByCityOrAgeJPQL(city, age);
+    }
     
     
     @PostMapping("/students")
@@ -164,11 +200,17 @@ public class StudentController {
 
         return studentService.updateStudent(id, student);
     }    
-    @DeleteMapping("/students/{id}")
-    public String deleteStudent(
-            @PathVariable("id") Long id) {
+    @PutMapping("/students/{id}/city")
+    public int updateStudentCity(
+            @PathVariable("id") Long id,
+            @RequestParam("city") String city) {
 
+        return studentService.updateStudentCity(id, city);
+    }
+    @DeleteMapping("/students/{id:\\d+}")
+    public String deleteStudent(@PathVariable("id") Long id) {
         return studentService.deleteStudent(id);
     }
-    
     }
+    
+    

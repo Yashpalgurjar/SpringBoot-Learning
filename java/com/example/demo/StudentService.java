@@ -11,7 +11,9 @@
     import com.example.demo.dto.CourseResponseDTO;
     import com.example.demo.dto.StudentRequestDTO;
     import com.example.demo.dto.StudentResponseDTO;
-
+    import java.util.List;
+    import org.springframework.web.bind.annotation.RequestParam;
+    import java.util.List;
     @Service
     public class StudentService {
     	
@@ -70,8 +72,32 @@
     	public long countAllStudentJPQL () {
     		return studentRepository.countAllStudentsJPQL();
     	}
-    
+    	public List<StudentData> findAllStudentsJPQL() {
+    	    return studentRepository.findAllStudentsJPQL();
+    	}
 
+    	public List<StudentData> findStudentsByAge(int age) {
+    	    return studentRepository.findStudentsByAge(age);
+    	}
+    	public List<StudentData> findStudentsByAgeGreaterThan(int age) {
+    	    return studentRepository.findStudentsByAgeGreaterThan(age);
+    	}
+    	public List<StudentData> findStudentsByAgeGreaterOrEqualJPQL(int age) {
+    	    return studentRepository.findStudentsByAgeGreaterOrEqualJPQL(age);
+    	}
+    	public List<StudentData> findByCityAndAgeJPQL(String city, int age) {
+    	    return studentRepository.findByCityAndAgeJPQL(city, age);
+    	}public List<StudentData> findByCityOrAgeJPQL(String city, int age) {
+    	    return studentRepository.findByCityOrAgeJPQL(city, age);
+    	}
+    	public int updateStudentCity(Long id, String city) {
+    	    return studentRepository.updateStudentCity(id, city);
+    	}
+    	public int deleteStudentByIdJPQL(Long id) {
+    	    return studentRepository.deleteStudentByIdJPQL(id);
+    	}public Page<StudentData> getStudents(Pageable pageable) {
+    	    return studentRepository.findAll(pageable);
+    	}
         private final StudentRepository studentRepository;
     
         public StudentService(StudentRepository studentsRepository) {
