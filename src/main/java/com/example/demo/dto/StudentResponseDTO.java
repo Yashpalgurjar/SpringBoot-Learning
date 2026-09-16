@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-
+import com.example.demo.dto.CourseResponseDTO;
 
 import java.awt.List;
 

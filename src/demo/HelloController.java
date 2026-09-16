@@ -25,7 +25,7 @@ public class HelloController {
         return "Weight = 50Kg";
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping()
     public String getName(@PathVariable String name) {
         return "Hello " + name;
     }

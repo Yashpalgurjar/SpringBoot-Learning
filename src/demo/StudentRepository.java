@@ -6,8 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import com.example.demo.dto.StudentSummaryDTO;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 
 import jakarta.transaction.Transactional;
 
@@ -205,6 +209,10 @@ public interface StudentRepository extends JpaRepository<StudentData, Long> {
     		       """)
     		int deleteStudentByIdJPQL(
     		        @Param("id") Long id);
-    	
+    		@Query("""
+    			       SELECT new com.example.demo.dto.StudentSummaryDTO(s.name, s.city)
+    			       FROM StudentData s
+    			       """)
+    			List<StudentSummaryDTO> findStudentSummaries();
 
 }
