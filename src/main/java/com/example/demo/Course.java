@@ -1,23 +1,13 @@
 package com.example.demo;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Course {
 
     @Id
@@ -27,6 +17,24 @@ public class Course {
     private String courseName;
 
     @ManyToOne
-    @JsonBackReference
+    @JoinColumn(name = "student_id")
     private StudentData student;
+
+    public StudentData getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentData student) {
+        this.student = student;
+    }
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+    public Long getId() {
+        return id;
+    }
 }
