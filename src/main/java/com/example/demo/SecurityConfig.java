@@ -1,5 +1,7 @@
 package com.example.demo;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,14 +11,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
+
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
+
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
+	
+	
+	
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http
+    
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    
+            http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
@@ -37,9 +57,13 @@ public class SecurityConfig {
 
             .requestMatchers(HttpMethod.DELETE, "/students/**")
                 .hasAuthority("STUDENT_DELETE")
-
+                .requestMatchers("/auth/**").permitAll()
             .anyRequest().authenticated()
     )
+            .addFilterBefore(
+                    jwtAuthenticationFilter,
+                    UsernamePasswordAuthenticationFilter.class
+            )
             .httpBasic(httpBasic -> {});
 
         return http.build();
@@ -49,7 +73,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
 
         UserDetails admin = User.withUsername("admin")
-                .password("{noop}1234")
+        		.password("{noop}1234")
                 .roles("ADMIN")
                 .authorities (
                 		"STUDENT_READ",
@@ -60,16 +84,8 @@ public class SecurityConfig {
 
                 .build();
         
-        
-
-
-        		
-        		
-        
-        
-
         UserDetails user = User.withUsername("user")
-                .password("{noop}1234")
+        		.password("{noop}1234")
                 .roles("USER")
                 .authorities("STUDENT_READ")
 
@@ -77,7 +93,12 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(admin, user);
     }
-      
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
+
+        return configuration.getAuthenticationManager();
+    }
       
     		  
     		  

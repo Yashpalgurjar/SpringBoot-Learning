@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-
 public class StudentRequestDTO {
 
     @NotBlank(message = "Name should not be blank")
@@ -18,11 +17,8 @@ public class StudentRequestDTO {
     @Email(message = "Please enter a valid email")
     @NotBlank(message = "Email should not be blank")
     private String email;
-
     private Long phone;
-
-    // Getters
-
+    
     public String getName() {
         return name;
     }
@@ -38,7 +34,7 @@ public class StudentRequestDTO {
     public String getEmail() {
         return email;
     }
-
+ 
     public Long getPhone() {
         return phone;
     }
