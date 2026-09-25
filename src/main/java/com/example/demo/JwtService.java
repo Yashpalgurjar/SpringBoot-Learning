@@ -2,6 +2,7 @@ package com.example.demo;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -10,26 +11,33 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "mySecretKeyForJwtAuthentication123456789";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
 
     public String generateToken(String username) {
 
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(key)
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getKey())
                 .compact();
     }
+
     public String extractUsername(String token) {
 
         return Jwts.parser()
-                .verifyWith(key)
+                .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
-}
+    }
 }

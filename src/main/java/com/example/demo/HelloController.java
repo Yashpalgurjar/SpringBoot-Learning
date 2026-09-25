@@ -14,7 +14,7 @@ public class HelloController {
     public String hello() {
         return "Hello Yashpal";
     }
-
+    
     @GetMapping("/age")
     public String age() {
         return "Age = 20";
