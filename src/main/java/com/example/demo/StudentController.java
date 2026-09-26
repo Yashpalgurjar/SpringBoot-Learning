@@ -29,7 +29,7 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
+    @PreAuthorize("hasAuthority('STUDENT_READ')")
     @GetMapping("/students")
     public Page<StudentResponseDTO> getStudents(Pageable pageable) {
         return studentService.getAllStudents(pageable);
@@ -203,7 +203,7 @@ public class StudentController {
                 .status(201)
                 .body(response);
     }
-
+    @PreAuthorize("hasAuthority('STUDENT_UPDATE')")
     @PutMapping("/students/{id}")
     public StudentResponseDTO updateStudent(
             @PathVariable("id") Long id,
@@ -211,7 +211,7 @@ public class StudentController {
 
         return studentService.updateStudent(id, studentRequestDTO);
     }
-
+    @PreAuthorize("hasAuthority('STUDENT_UPDATE')")
     @PutMapping("/students/{id}/city")
     public int updateStudentCity(
             @PathVariable("id") Long id,
@@ -219,7 +219,7 @@ public class StudentController {
 
         return studentService.updateStudentCity(id, city);
     }
-
+    @PreAuthorize("hasAuthority('STUDENT_UPDATE')")
     @DeleteMapping("/students/{id:\\d+}")
     public String deleteStudent(
             @PathVariable("id") Long id) {
