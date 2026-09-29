@@ -21,7 +21,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath().startsWith("/auth/");
+    }
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserDetailsService userDetailsService) {
@@ -71,7 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-
+                     
             response.getWriter().write(
                     "{\"error\":\"JWT token has expired\"}"
             );

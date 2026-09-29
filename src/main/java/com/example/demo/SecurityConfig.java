@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.context.annotation.Bean;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -80,10 +80,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/students/**")
                     .hasAuthority("STUDENT_DELETE")
 
-                .requestMatchers("/auth/**")
-                    .permitAll()
-
-                .anyRequest()
+                .requestMatchers("/auth/**", "/error").permitAll()                .anyRequest()
                     .authenticated()
             )
 
@@ -103,30 +100,9 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("1234"))
-                .roles("ADMIN")
-                .authorities(
-                    "STUDENT_READ",
-                    "STUDENT_CREATE",
-                    "STUDENT_UPDATE",
-                    "STUDENT_DELETE"
-                )
-                .build();
 
 
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("1234"))
-                .roles("USER")
-                .authorities("STUDENT_READ")
-                .build();
-
-
-        return new InMemoryUserDetailsManager(admin, user);
-    }
+    
 
     @Bean
     public AuthenticationManager authenticationManager(

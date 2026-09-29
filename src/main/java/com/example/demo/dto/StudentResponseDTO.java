@@ -14,11 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StudentResponseDTO {
 	
-
-
 	
-	
-		
     private Long id;
     private String name;
     private int age;

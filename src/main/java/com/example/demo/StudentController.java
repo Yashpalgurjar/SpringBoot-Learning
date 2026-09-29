@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.List;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import com.example.demo.dto.StudentSummaryDTO;
 import jakarta.validation.Valid;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class StudentController {
 
     private final StudentService studentService;
