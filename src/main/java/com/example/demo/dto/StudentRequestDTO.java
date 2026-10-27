@@ -10,7 +10,7 @@ public class StudentRequestDTO {
 
     @Min(value = 18, message = "Age must be at least 18")
     private int age;
-
+    
     @NotBlank(message = "City should not be blank")
     private String city;
 
