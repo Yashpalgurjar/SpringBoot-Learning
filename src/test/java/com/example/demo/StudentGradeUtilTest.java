@@ -3,46 +3,40 @@ package com.example.demo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import com.example.demo.StudentGradeUtil;
-
+@DisplayName("StudentGradeUtil tests")
 class StudentGradeUtilTest {
 
-    @Test
-    void shouldReturnGradeA_whenMarksAre80() {
-        assertEquals("A", StudentGradeUtil.calculateGrade(80));
+    @ParameterizedTest(name = "marks {0} should give grade {1}")
+    @CsvSource({
+            "100, A", "80, A", "75, A",
+            "74, B",  "60, B", "50, B",
+            "49, C",  "40, C", "35, C",
+            "34, F",  "20, F", "0, F"
+    })
+    @DisplayName("Valid marks return the correct grade")
+    void shouldReturnCorrectGrade(int marks, String expectedGrade) {
+        assertEquals(expectedGrade, StudentGradeUtil.calculateGrade(marks));
     }
 
-    @Test
-    void shouldReturnGradeA_whenMarksAre75() {
-        assertEquals("A", StudentGradeUtil.calculateGrade(75));
-    }
-
-    @Test
-    void shouldReturnGradeB_whenMarksAre60() {
-        assertEquals("B", StudentGradeUtil.calculateGrade(60));
-    }
-
-    @Test
-    void shouldReturnGradeC_whenMarksAre40() {
-        assertEquals("C", StudentGradeUtil.calculateGrade(40));
-    }
-
-    @Test
-    void shouldReturnGradeF_whenMarksAre20() {
-        assertEquals("F", StudentGradeUtil.calculateGrade(20));
-    }
-
-    @Test
-    void shouldThrowException_whenMarksAreNegative() {
+    @ParameterizedTest(name = "marks {0} should throw exception")
+    @ValueSource(ints = {-1, -5, 101, 1000})
+    @DisplayName("Invalid marks throw IllegalArgumentException")
+    void shouldThrowException_whenMarksAreInvalid(int marks) {
         assertThrows(IllegalArgumentException.class,
-                () -> StudentGradeUtil.calculateGrade(-5));
+                () -> StudentGradeUtil.calculateGrade(marks));
     }
 
     @Test
-    void shouldThrowException_whenMarksAreAbove100() {
-        assertThrows(IllegalArgumentException.class,
-                () -> StudentGradeUtil.calculateGrade(101));
+    @DisplayName("Exception message is correct")
+    void shouldHaveCorrectMessage_whenMarksAreInvalid() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> StudentGradeUtil.calculateGrade(-1));
+        assertEquals("Marks must be between 0 and 100", ex.getMessage());
     }
 }
