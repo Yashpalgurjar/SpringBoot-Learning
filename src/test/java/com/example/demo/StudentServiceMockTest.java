@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -77,5 +78,39 @@ class StudentServiceMockTest {
 
         assertEquals("Student not found with id: 99", ex.getMessage());
         verify(studentRepository).findById(99L);
+    }
+    @Test
+    @DisplayName("deleteStudent deletes student and returns message when id exists")
+    void shouldDeleteStudent_whenIdExists() {
+        // Arrange
+        StudentData student = new StudentData();
+        student.setId(1L);
+        student.setName("Yashu");
+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+
+        // Act
+        String result = studentService.deleteStudent(1L);
+
+        // Assert
+        assertEquals("Student Deleted", result);
+        verify(studentRepository).findById(1L);
+        verify(studentRepository).delete(student);
+    }
+
+    @Test
+    @DisplayName("deleteStudent throws exception and does not delete when id not found")
+    void shouldThrowException_whenDeletingNonExistingStudent() {
+        // Arrange
+        when(studentRepository.findById(99L)).thenReturn(Optional.empty());
+
+        // Act + Assert
+        StudentNotFoundException ex = assertThrows(
+                StudentNotFoundException.class,
+                () -> studentService.deleteStudent(99L));
+
+        assertEquals("Student not found with id: 99", ex.getMessage());
+        verify(studentRepository).findById(99L);
+        verify(studentRepository, never()).delete(any());
     }
 }
